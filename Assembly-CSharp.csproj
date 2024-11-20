@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets/Scripts/PlayerMovment.cs" />
+    <Compile Include="Assets/Scripts/rq.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
