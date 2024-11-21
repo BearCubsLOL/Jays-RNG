@@ -4,10 +4,13 @@ using UnityEngine;
 public class PlayerMovment : MonoBehaviour
 {
     [SerializeField] private float playerSpeed = 5f;
-    [SerializeField] private float cameraShakeSpeed = 2f;
+    [SerializeField] private float cameraWalkingShakeSpeed = 2f;
+
     [SerializeField] private GameObject player;
     [SerializeField] private GameObject playerCamera;
+
     [SerializeField] private bool isWalking = false;
+    [SerializeField] private bool baseState = true;
 
     void Walk()
     {
@@ -31,15 +34,22 @@ public class PlayerMovment : MonoBehaviour
             isWalking = true;
             player.transform.position += new Vector3(playerSpeed * Time.deltaTime, 0f, 0f);
         }
+        if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
+        {
+            isWalking = false;
+        }
     }
 
-    private IEnumerator CameraShake()
+    void cameraFollow()
     {
-        while (isWalking)
+        playerCamera.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 2.9f, player.transform.position.z - 3.5f);
+    }
+
+    void playerAlign()
+    {
+        if (baseState)
         {
-            playerCamera.transform.position += new Vector3(0f, cameraShakeSpeed * Time.deltaTime, 0f);
-            yield return new WaitForSeconds(0.5f);
-            playerCamera.transform.position -= new Vector3(0f, cameraShakeSpeed * Time.deltaTime, 0f);
+            player.transform.localEulerAngles = new Vector3(0f, 0f, 0f) * Time.deltaTime * 45;
         }
     }
 
@@ -47,6 +57,8 @@ public class PlayerMovment : MonoBehaviour
     {
         Walk();
 
-        CameraShake();
+        cameraFollow();
+
+        playerAlign();
     }
 }
